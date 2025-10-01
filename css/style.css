@@ -1,16 +1,57 @@
 /* General Section Spacing & Responsive */
 section {
-    min-height: 100vh;
-    padding: 7rem 0 4rem 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    min-height: auto;
+    padding: 10rem 9% 4rem 9%;
     position: relative;
     scroll-margin-top: 80px; /* Smooth scroll offset for fixed header */
 }
 
+/* Scroll Animation */
+.hidden {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Custom Cursor */
+.cursor-dot, .cursor-outline {
+    pointer-events: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.1s;
+    z-index: 9999;
+}
+
+.cursor-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--main-color);
+}
+
+.cursor-outline {
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--main-color);
+    background-color: rgba(0, 171, 240, 0.1);
+}
+
+body.cursor-hover .cursor-outline {
+    transform: translate(-50%, -50%) scale(1.5);
+    background-color: rgba(0, 171, 240, 0.2);
+}
+
 /* Touch device improvements */
 @media (hover: none) and (pointer: coarse) {
+    .cursor-dot, .cursor-outline { display: none; }
     /* Disable hover effects on touch devices */
     .skill-item:hover,
     .project-box:hover,
@@ -65,6 +106,7 @@ section {
     z-index: 0;
     opacity: 0.12;
     pointer-events: none;
+    transition: transform 0.3s ease-out;
 }
 .decor-circle {
     width: 180px; height: 180px;
@@ -408,13 +450,13 @@ header {
     border-radius: 1.8rem;
     overflow: hidden;
     box-shadow: 0 8px 32px 0 rgba(0,171,240,0.12);
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform 0.4s ease, box-shadow 0.3s;
     border: 2px solid transparent;
     position: relative;
+    transform-style: preserve-3d;
 }
 
 .project-box:hover {
-    transform: translateY(-8px) scale(1.02);
     box-shadow: 0 16px 48px 0 rgba(0,171,240,0.24);
     border: 2px solid #00e1ff;
 }
@@ -771,6 +813,20 @@ header {
 .journey-card:hover::after {
     opacity: 0.12;
     background: linear-gradient(90deg, var(--main-color) 60%, #00e1ff 100%);
+}
+
+.journey-img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 0.8rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.journey-card:hover .journey-img {
+    opacity: 1;
 }
 
 /* Skills Section: Tambah icon, hover, dan bar animasi */
@@ -1314,14 +1370,6 @@ body{
     color: var(--text-color);
 }
 
-section {
-    min-height: 100vh;
-    padding: 8rem 9% 2rem 9%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
 .heading {
     font-size: 4rem;
     text-align: center;
@@ -1818,7 +1866,7 @@ section {
 /* Mobile Landscape */
 @media (max-width: 900px) and (orientation: landscape) {
     section {
-        min-height: 100vh;
+        min-height: auto;
         padding: 5rem 5% 2rem 5%;
     }
     
@@ -1997,72 +2045,6 @@ header {
         gap: 3rem;
         box-shadow: -2px 0 20px 0 rgba(0,0,0,0.2);
         transition: right 0.4s cubic-bezier(.7,1.5,.7,1);
-        z-index: 1200;
-    }
-    .navbar.open {
-        right: 0;
-    }
-    .navbar a {
-        font-size: 2rem;
-        padding: 1.2rem 2rem;
-        width: 100%;
-        border-radius: 1rem;
-        text-align: left;
-    }
-    .hamburger {
-        display: flex;
-        margin-left: 2rem;
-    }
-    .logo {
-        font-size: 2.2rem;
-    }
-    header {
-        padding: 1.5rem 5%;
+        z-index: 1200; 
     }
 }
-
-@media (max-width: 600px) {
-    html { font-size: 50%; }
-    .home-img img { width: 120px; height: 120px; }
-    .heading { font-size: 2.2rem; }
-    .navbar { width: 80vw; }
-}
-
-/* Project Section */
-.project {
-    background: var(--second-bg-color);
-}
-
-.project-container {
-    display: flex;
-    gap: 2rem;
-    overflow-x: auto;
-    padding: 2rem 1rem;
-    scrollbar-width: thin;
-    scrollbar-color: var(--main-color) var(--second-bg-color);
-}
-
-.project-container::-webkit-scrollbar {
-    height: 8px;
-}
-
-.project-container::-webkit-scrollbar-track {
-    background: var(--second-bg-color);
-}
-
-.project-container::-webkit-scrollbar-thumb {
-    background-color: var(--main-color);
-    border-radius: 10px;
-    border: 3px solid var(--second-bg-color);
-}
-
-.project-box {
-    position: relative;
-    border-radius: 2rem;
-    box-shadow: 0 0 1rem var(--bg-color);
-    overflow: hidden;
-    display: flex;
-    flex: 0 0 300px; /* Memberi lebar tetap pada kartu proyek */
-    height: 400px;
-}
-

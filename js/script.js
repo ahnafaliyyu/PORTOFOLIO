@@ -33,62 +33,60 @@ function typeEffect() {
 }
 typeEffect();
 
-// Improved skills animation with Intersection Observer
-function initSkillsAnimation() {
-	const skillProgressBars = document.querySelectorAll('.skill-progress');
-	const skillItems = document.querySelectorAll('.skill-item');
-	
-	if (skillProgressBars.length === 0) return;
-	
-	const observerOptions = {
-		threshold: 0.3,
-		rootMargin: '0px 0px -100px 0px'
-	};
-	
-	const observer = new IntersectionObserver((entries) => {
-		entries.forEach(entry => {
-			if (entry.isIntersecting) {
-				// Animate all skill bars when skills section comes into view
-				skillProgressBars.forEach((bar, index) => {
-					setTimeout(() => {
-						if (bar.classList.contains('html')) bar.style.width = '90%';
-						else if (bar.classList.contains('css')) bar.style.width = '85%';
-						else if (bar.classList.contains('js')) bar.style.width = '75%';
-						else if (bar.classList.contains('uiux')) bar.style.width = '70%';
-						else if (bar.classList.contains('react')) bar.style.width = '65%';
-						else if (bar.classList.contains('nodejs')) bar.style.width = '60%';
-					}, index * 200); // Stagger animation
-				});
-				
-				// Add entrance animation to skill items
-				skillItems.forEach((item, index) => {
-					setTimeout(() => {
-						item.style.opacity = '1';
-						item.style.transform = 'translateY(0)';
-					}, index * 150);
-				});
-			}
-		});
-	}, observerOptions);
-	
-	const skillsSection = document.querySelector('.skills');
-	if (skillsSection) {
-		observer.observe(skillsSection);
-		
-		// Set initial state for skill items
-		skillItems.forEach(item => {
-			item.style.opacity = '0';
-			item.style.transform = 'translateY(30px)';
-			item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-		});
-	}
+// Typing effect for About Me section
+const typingTextAboutEl = document.querySelector('.typing-text-about');
+if (typingTextAboutEl) {
+    const words = ["UI/UX Designer", "Front End Developer", "Web Enthusiast"];
+    let wordIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+
+    function typeAbout() {
+        const currentWord = words[wordIndex];
+        let displayText = '';
+
+        if (isDeleting) {
+            displayText = currentWord.substring(0, charIndex--);
+        } else {
+            displayText = currentWord.substring(0, charIndex++);
+        }
+
+        // Add blue color to "Front End Developer"
+        if (currentWord === "Front End Developer") {
+            typingTextAboutEl.innerHTML = `<span class="typed-text-about">${displayText}</span>`;
+        } else {
+            typingTextAboutEl.textContent = displayText;
+        }
+
+        let typeSpeed = isDeleting ? 75 : 150;
+
+        if (!isDeleting && charIndex === currentWord.length) {
+            typeSpeed = 2000; // Pause at end of word
+            isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            wordIndex = (wordIndex + 1) % words.length;
+            typeSpeed = 500; // Pause before new word
+        }
+
+        setTimeout(typeAbout, typeSpeed);
+    }
+    typeAbout();
 }
 
-// Initialize on DOM load
-document.addEventListener('DOMContentLoaded', initSkillsAnimation);
+// General scroll animation
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('show');
+        } else {
+            entry.target.classList.remove('show');
+        }
+    });
+});
 
-// Smooth scroll for navbar links
-
+const hiddenElements = document.querySelectorAll('.hidden');
+hiddenElements.forEach((el) => observer.observe(el));
 
 // Hamburger menu toggle & close on link click (mobile)
 const hamburger = document.getElementById('hamburger-menu');
@@ -140,34 +138,97 @@ if (hamburger && navbar) {
 
 // Navbar active link on scroll - Improved
 const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.navbar a[href^="#"]');
+const navLinks = document.querySelectorAll('.navbar a');
 
-function updateActiveNav() {
-	let current = 'home'; // default to home
-	const scrollPos = window.scrollY + 150; // offset untuk header
+window.onscroll = () => {
+    sections.forEach(sec => {
+        let top = window.scrollY;
+        let offset = sec.offsetTop - 150;
+        let height = sec.offsetHeight;
+        let id = sec.getAttribute('id');
 
-	sections.forEach(section => {
-		const sectionTop = section.offsetTop;
-		const sectionHeight = section.offsetHeight;
-		const sectionId = section.getAttribute('id');
-		
-		if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
-			current = sectionId;
-		}
-	});
+        if (top >= offset && top < offset + height) {
+            navLinks.forEach(links => {
+                links.classList.remove('active');
+                document.querySelector('.navbar a[href*=' + id + ']').classList.add('active');
+            });
+        }
+    });
+};
 
-	// Update active class
-	navLinks.forEach(link => {
-		link.classList.remove('active');
-		if (link.getAttribute('href') === '#' + current) {
-			link.classList.add('active');
-		}
-	});
+
+// Custom Cursor Logic
+const cursorDot = document.querySelector('.cursor-dot');
+const cursorOutline = document.querySelector('.cursor-outline');
+
+// Initialize cursor positions to the center of the screen
+let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
+let outlineX = window.innerWidth / 2;
+let outlineY = window.innerHeight / 2;
+
+// Make cursor visible on load
+if (cursorDot && cursorOutline) {
+    cursorDot.style.opacity = '1';
+    cursorOutline.style.opacity = '1';
 }
 
-// Listen to scroll events
-window.addEventListener('scroll', updateActiveNav);
-window.addEventListener('load', updateActiveNav);
+window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+});
+
+// Animation loop for the spring effect
+function animateCursor() {
+    if (!cursorDot || !cursorOutline) return;
+    // Calculate distance between outline and mouse
+    const dx = mouseX - outlineX;
+    const dy = mouseY - outlineY;
+
+    // Move the outline towards the mouse with a spring-like delay (lerp)
+    outlineX += dx * 0.15; // Increased speed slightly for better feel
+    outlineY += dy * 0.15;
+
+    // Update both dot and outline positions
+    cursorDot.style.left = `${mouseX}px`;
+    cursorDot.style.top = `${mouseY}px`;
+    cursorOutline.style.left = `${outlineX}px`;
+    cursorOutline.style.top = `${outlineY}px`;
+
+    requestAnimationFrame(animateCursor);
+}
+
+// Start the animation loop
+animateCursor();
+
+
+// Add hover effect for links, buttons, etc.
+const interactiveElements = document.querySelectorAll('a, button, .journey-card, .skill-item, .project-box, .social-icon');
+interactiveElements.forEach(el => {
+    el.addEventListener('mouseover', () => {
+        document.body.classList.add('cursor-hover');
+    });
+    el.addEventListener('mouseout', () => {
+        document.body.classList.remove('cursor-hover');
+    });
+});
+
+// Hide cursor when it leaves the window
+document.addEventListener('mouseout', (e) => {
+    if (!cursorDot || !cursorOutline) return;
+    // Check if the mouse has left the viewport
+    if (!e.relatedTarget && !e.toElement) {
+        cursorDot.style.opacity = '0';
+        cursorOutline.style.opacity = '0';
+    }
+});
+
+// Show cursor when it enters the window
+document.addEventListener('mouseover', () => {
+    if (!cursorDot || !cursorOutline) return;
+    cursorDot.style.opacity = '1';
+    cursorOutline.style.opacity = '1';
+});
 
 
 const toggleBtn = document.getElementById('dark-toggle');
@@ -188,3 +249,35 @@ toggleBtn.addEventListener('click', () => {
   }
 });
 
+// Parallax effect
+const decorCircle = document.querySelector('.decor-circle');
+const decorRect = document.querySelector('.decor-rect');
+
+window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    if (decorCircle) {
+        decorCircle.style.transform = `translateY(${scrollY * 0.1}px)`;
+    }
+    if (decorRect) {
+        decorRect.style.transform = `translateY(${scrollY * 0.05}px)`;
+    }
+});
+
+// 3D Tilt Effect
+document.querySelectorAll('.project-box').forEach(box => {
+    box.addEventListener('mousemove', (e) => {
+        const rect = box.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = (y - centerY) / 20;
+        const rotateY = (centerX - x) / 20;
+
+        box.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+    });
+
+    box.addEventListener('mouseleave', () => {
+        box.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+    });
+});
