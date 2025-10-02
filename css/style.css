@@ -4,6 +4,10 @@ section {
     padding: 10rem 9% 4rem 9%;
     position: relative;
     scroll-margin-top: 80px; /* Smooth scroll offset for fixed header */
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 /* Scroll Animation */
@@ -115,6 +119,7 @@ body.cursor-hover .cursor-outline {
     position: absolute;
     left: -90px; top: 10%;
     filter: blur(8px);
+    overflow: hidden;
 }
 .decor-rect {
     width: 120px; height: 60px;
@@ -123,6 +128,7 @@ body.cursor-hover .cursor-outline {
     position: absolute;
     right: -60px; bottom: 10%;
     filter: blur(4px);
+    overflow: hidden;
 }
 
 /* Header & Navbar Mobile Fix */
@@ -191,11 +197,12 @@ header {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2.5rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
+    max-width: 1400px;
     width: 100%;
+    margin: 0 auto;
+    padding: 0;
     justify-items: center;
+    box-sizing: border-box;
 }
 
 .skill-item {
@@ -444,9 +451,11 @@ header {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
     gap: 3rem;
-    max-width: 1200px;
+    max-width: 1400px;
+    width: 100%;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 .project-box {
@@ -729,6 +738,10 @@ header {
     gap: 4rem;
     min-height: 80vh;
     position: relative;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    box-sizing: border-box;
 }
 .home-social {
     display: flex;
@@ -899,6 +912,7 @@ header {
 }
 .contact-form-grid {
     max-width: 900px;
+    width: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -906,6 +920,7 @@ header {
     background: none;
     box-shadow: none;
     padding: 0;
+    box-sizing: border-box;
 }
 .contact-row {
     display: flex;
@@ -976,11 +991,16 @@ header {
     justify-content: center;
     align-items: flex-start;
     flex-wrap: wrap;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    box-sizing: border-box;
 }
 .journey-col {
     flex: 1 1 320px;
-    min-width: 320px;
+    min-width: 280px;
     max-width: 480px;
+    box-sizing: border-box;
 }
 .journey-heading {
     font-size: 2.1rem;
@@ -1169,7 +1189,8 @@ header {
 }
 /* About Section */
 .about-container {
-    max-width: 900px;
+    max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -1177,6 +1198,7 @@ header {
     justify-content: center;
     text-align: center;
     padding: 6rem 0 4rem 0;
+    box-sizing: border-box;
 }
 .about-title {
     font-size: 3.5rem;
@@ -1221,7 +1243,9 @@ header {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    min-width: 320px;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 .home-title {
     font-size: 4.2rem;
@@ -1310,6 +1334,9 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 .home-img {
     width: 420px;
@@ -1367,11 +1394,19 @@ header {
 html{
     font-size: 62.5%;
     overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
 }
 
 body{
     background: var(--bg-color);
     color: var(--text-color);
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    margin: 0;
+    padding: 0;
+    position: relative;
 }
 
 .heading {
@@ -1910,6 +1945,7 @@ header {
     top: 0;
     left: 0;
     width: 100%;
+    max-width: 100vw;
     padding: 1.5rem 9%;
     background: rgba(8, 27, 41, 0.85);
     backdrop-filter: blur(8px);
@@ -1919,6 +1955,7 @@ header {
     z-index: 1000;
     box-shadow: 0 2px 16px 0 rgba(0,0,0,0.08);
     transition: background 0.3s;
+    box-sizing: border-box;
 }
 
 .logo {
@@ -2051,4 +2088,10 @@ header {
         transition: right 0.4s cubic-bezier(.7,1.5,.7,1);
         z-index: 1200; 
     }
+}
+.contact {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
